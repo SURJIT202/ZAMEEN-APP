@@ -1,0 +1,535 @@
+<!DOCTYPE html>
+<html lang="pa">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#1b5e20">
+<meta name="description" content="ZameenNaap – Land measurement calculator: Kanal, Marla, Sarwahi, Killa, Bigha, Acre, Hectare converter + area from length & width + formulas. ਜ਼ਮੀਨ ਨਾਪ, ज़मीन नाप.">
+<title>ZameenNaap — ਜ਼ਮੀਨ ਨਾਪ | Land Measurement</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E🌱%3C/text%3E%3C/svg%3E">
+<style>
+:root{
+  --g1:#1b5e20; --g2:#388e3c; --gsoft:#e8f5e9; --acc:#f9a825;
+  --bg:#f3f7f3; --card:#ffffff; --ink:#1c2b1c; --mut:#6b7a6d; --line:#e1eae1;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;padding:0}
+body{
+  font-family:system-ui,-apple-system,"Segoe UI",Roboto,"Noto Sans","Noto Sans Gurmukhi","Noto Sans Devanagari",Arial,sans-serif;
+  background:var(--bg);color:var(--ink);font-size:16px;line-height:1.45;
+}
+header{background:linear-gradient(135deg,var(--g1),var(--g2));color:#fff;padding:14px 16px 14px}
+.brand{display:flex;align-items:center;gap:12px}
+.logo{font-size:26px;background:rgba(255,255,255,.16);width:46px;height:46px;border-radius:13px;display:flex;align-items:center;justify-content:center;flex:none}
+h1{font-size:1.3rem;margin:0;letter-spacing:.2px}
+.tag{font-size:.82rem;opacity:.9;margin-top:2px}
+.langs{display:flex;gap:6px;margin-top:12px}
+.lang-btn{border:1px solid rgba(255,255,255,.45);background:rgba(255,255,255,.10);color:#fff;padding:6px 14px;border-radius:99px;font-size:.85rem;font-weight:600;cursor:pointer}
+.lang-btn.active{background:var(--acc);border-color:var(--acc);color:#4e342e}
+nav.tabs{display:flex;gap:6px;padding:10px 12px 0;position:sticky;top:0;background:var(--bg);z-index:20;border-bottom:1px solid var(--line)}
+.tab-btn{flex:1;display:flex;align-items:center;justify-content:center;gap:6px;padding:11px 4px;border:1px solid transparent;border-bottom:none;background:transparent;border-radius:12px 12px 0 0;font-size:.92rem;font-weight:600;color:var(--mut);cursor:pointer}
+.tab-btn .ti{font-size:1.05rem}
+.tab-btn.active{background:var(--card);border-color:var(--line);color:var(--g1);box-shadow:0 -2px 8px rgba(27,94,32,.08)}
+main{padding:14px 14px 30px;max-width:660px;margin:0 auto}
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:14px;margin-bottom:12px;box-shadow:0 1px 3px rgba(27,94,32,.06)}
+.seg{display:flex;background:var(--gsoft);border-radius:12px;padding:4px;margin-bottom:12px}
+.seg button{flex:1;padding:9px 6px;border:0;background:transparent;border-radius:9px;font-size:.92rem;font-weight:700;color:var(--mut);cursor:pointer}
+.seg button.active{background:#fff;color:var(--g1);box-shadow:0 1px 4px rgba(0,0,0,.14)}
+.row{display:grid;grid-template-columns:1.35fr 1fr;gap:8px;margin-bottom:10px}
+label{font-size:.78rem;font-weight:700;color:var(--mut);display:block;margin:2px 2px 5px}
+input[type=number],select{width:100%;padding:12px;font-size:1.05rem;border:1.5px solid var(--line);border-radius:12px;background:#fff;color:var(--ink);font-family:inherit}
+input[type=number]{font-weight:700}
+.big input[type=number]{font-size:1.55rem;padding:13px 12px}
+input:focus,select:focus{outline:2px solid var(--g2);border-color:var(--g2)}
+.hero{background:linear-gradient(135deg,#e8f5e9,#f1f8e9);border:1px solid #c5e1a5;border-radius:14px;padding:12px 14px;margin:0 0 12px}
+.hero .cap{font-size:.72rem;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:#557b56}
+.hero .line1{font-size:1.32rem;font-weight:800;color:var(--g1);margin-top:2px;word-spacing:2px}
+.hero .line2{font-size:.86rem;color:var(--mut);margin-top:3px}
+.res-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:6px}
+.res-head .rt{font-size:.8rem;font-weight:800;letter-spacing:.03em;text-transform:uppercase;color:var(--mut)}
+.copy-btn{border:1px solid var(--line);background:var(--gsoft);color:var(--g1);font-weight:700;font-size:.78rem;padding:6px 12px;border-radius:99px;cursor:pointer}
+table.res{width:100%;border-collapse:collapse}
+table.res th{font-size:.7rem;text-transform:uppercase;letter-spacing:.05em;color:var(--mut);text-align:left;padding:6px 8px;border-bottom:1px solid var(--line)}
+table.res td{padding:9px 8px;border-bottom:1px solid var(--line);font-size:.97rem;vertical-align:top}
+table.res tr:last-child td{border-bottom:none}
+table.res tr.grp td{background:#f0f6f0;font-weight:800;color:var(--g1);font-size:.74rem;text-transform:uppercase;letter-spacing:.04em;padding:7px 8px}
+td.val{text-align:right;font-weight:800;font-variant-numeric:tabular-nums;white-space:nowrap}
+td.uname .en{color:var(--mut);font-size:.8rem;font-weight:500}
+.hint{color:var(--mut);text-align:center;padding:18px 6px;font-size:.95rem}
+.fline{background:#fffbeb;border:1px solid #f5e6b8;border-radius:12px;padding:10px 12px;font-size:.9rem;margin-bottom:12px;color:#6d5a1f;overflow-wrap:anywhere}
+.fline b{color:#8a6d1a}
+.fcard h3{margin:0 0 4px;font-size:1rem;color:var(--g1)}
+.frow{padding:8px 2px;border-bottom:1px dashed var(--line);font-size:.95rem}
+.frow:last-child{border-bottom:none}
+.frow .fx{font-weight:700}
+.frow .fd{font-size:.78rem;color:var(--mut);margin-top:1px}
+table.bt td{font-size:.9rem}
+table.bt td.v{text-align:right;font-weight:800;white-space:nowrap}
+footer{max-width:660px;margin:0 auto;padding:0 16px 34px;font-size:.78rem;color:var(--mut);text-align:center}
+.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%) translateY(90px);background:#20301f;color:#fff;padding:10px 20px;border-radius:99px;font-size:.9rem;font-weight:600;opacity:0;transition:.28s;z-index:99;pointer-events:none}
+.toast.show{transform:translateX(-50%) translateY(0);opacity:1}
+@media (max-width:380px){ .row{grid-template-columns:1fr 1fr} h1{font-size:1.12rem} }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="brand">
+    <div class="logo">🌱</div>
+    <div>
+      <h1>ZameenNaap</h1>
+      <div class="tag" data-t="tag"></div>
+    </div>
+  </div>
+  <div class="langs">
+    <button class="lang-btn" data-lang="pa">ਪੰਜਾਬੀ</button>
+    <button class="lang-btn" data-lang="hi">हिंदी</button>
+    <button class="lang-btn" data-lang="en">English</button>
+  </div>
+</header>
+
+<nav class="tabs">
+  <button class="tab-btn active" data-tab="convert"><span class="ti">🔄</span><span data-t="tab_convert"></span></button>
+  <button class="tab-btn" data-tab="calc"><span class="ti">📐</span><span data-t="tab_calc"></span></button>
+  <button class="tab-btn" data-tab="formula"><span class="ti">📖</span><span data-t="tab_formula"></span></button>
+</nav>
+
+<main>
+
+  <!-- ================= TAB 1 : CONVERTER ================= -->
+  <section id="sec-convert">
+    <div class="card">
+      <div class="seg" id="modeSeg">
+        <button data-mode="area" class="active" data-t="seg_area"></button>
+        <button data-mode="length" data-t="seg_length"></button>
+      </div>
+      <div class="row big">
+        <div>
+          <label data-t="in_value"></label>
+          <input type="number" id="convInput" value="1" step="any" inputmode="decimal">
+        </div>
+        <div>
+          <label data-t="in_unit"></label>
+          <select id="convUnit"></select>
+        </div>
+      </div>
+    </div>
+    <div id="convResults"></div>
+  </section>
+
+  <!-- ================= TAB 2 : AREA CALCULATOR ================= -->
+  <section id="sec-calc" hidden>
+    <div class="card">
+      <div class="seg" id="shapeSeg">
+        <button data-shape="rect" class="active" data-t="rect"></button>
+        <button data-shape="tri" data-t="tri"></button>
+      </div>
+      <div class="row">
+        <div>
+          <label id="lblL" data-t="length"></label>
+          <input type="number" id="inpL" value="110" step="any" inputmode="decimal">
+        </div>
+        <div>
+          <label data-t="in_unit"></label>
+          <select id="unitL"></select>
+        </div>
+      </div>
+      <div class="row">
+        <div>
+          <label id="lblW" data-t="width"></label>
+          <input type="number" id="inpW" value="49.5" step="any" inputmode="decimal">
+        </div>
+        <div>
+          <label data-t="in_unit"></label>
+          <select id="unitW"></select>
+        </div>
+      </div>
+    </div>
+    <div id="calcResults"></div>
+  </section>
+
+  <!-- ================= TAB 3 : FORMULAS ================= -->
+  <section id="sec-formula" hidden>
+    <div id="formulaContent"></div>
+  </section>
+
+</main>
+
+<footer>
+  <div data-t="note"></div>
+  <div style="margin-top:6px">🌱 ZameenNaap · <span data-t="made"></span></div>
+</footer>
+
+<div class="toast" id="toast"></div>
+
+<script>
+'use strict';
+/* ================= STATE ================= */
+var state = { lang:'pa', tab:'convert', mode:'area', shape:'rect',
+              convUnit:'kanal', unitL:'ft', unitW:'ft' };
+try { var sl = localStorage.getItem('zn_lang'); if(sl && I18N_OK(sl)) state.lang = sl; } catch(e){}
+function I18N_OK(l){ return l==='pa'||l==='hi'||l==='en'; }
+
+/* ================= I18N ================= */
+var I18N = {
+ pa:{ tag:'ਜ਼ਮੀਨ ਨਾਪ · ਕੈਲਕੁਲੇਟਰ',
+   tab_convert:'ਬਦਲੋ', tab_calc:'ਖੇਤਰਫਲ', tab_formula:'ਫਾਰਮੂਲੇ',
+   seg_area:'ਖੇਤਰਫਲ (Area)', seg_length:'ਲੰਬਾਈ (Length)',
+   in_value:'ਮੁੱਲ ਲਿਖੋ', in_unit:'ਯੂਨਿਟ',
+   res_title:'ਨਤੀਜਾ — ਸਾਰੇ ਯੂਨਿਟਾਂ ਵਿੱਚ',
+   in_km:'ਕਨਾਲ–ਮਰਲਾ–ਸਰਵਾਹੀ ਵਿੱਚ',
+   len_note:'ਸੁਝਾਅ: 1 ਕਰਮ × 1 ਕਰਮ = 1 ਸਰਵਾਹੀ = 30.25 ਵਰਗ ਫੁੱਟ',
+   length:'ਲੰਬਾਈ (Length)', width:'ਚੌੜਾਈ (Width)', base:'ਅਧਾਰ (Base)', height:'ਉਚਾਈ (Height)',
+   total:'ਕੁੱਲ ਖੇਤਰਫਲ', formula:'ਫਾਰਮੂਲਾ',
+   copy:'ਕਾਪੀ ਕਰੋ', copied:'ਕਾਪੀ ਹੋ ਗਿਆ ✓',
+   rect:'ਆਇਤ (Rectangle)', tri:'ਤਿਕੋਣ (Triangle)',
+   g_punjab:'ਪੰਜਾਬੀ ਯੂਨਿਟ', g_std:'ਮਿਆਰੀ ਯੂਨਿਟ', g_region:'ਹੋਰ ਸੂਬੇ (ਲਗਭਗ)', g_len:'ਲੰਬਾਈ ਯੂਨਿਟ',
+   th_unit:'ਯੂਨਿਟ', th_value:'ਮੁੱਲ',
+   enter_hint:'ਉੱਪਰ ਮੁੱਲ ਲਿਖੋ…',
+   note:'ਨੋਟ: ਮਰਲਾ = 272.25 ਵਰਗ ਫੁੱਟ (ਮਿਆਰੀ) ਮੰਨਿਆ ਗਿਆ ਹੈ। ਕੁਝ ਇਲਾਕਿਆਂ ਵਿੱਚ ਕੱਚਾ ਮਰਲਾ ਵੱਖਰਾ ਹੁੰਦਾ ਹੈ — ਵੇਚ-ਖਰੀਦ ਤੋਂ ਪਹਿਲਾਂ ਤਸਦੀਕ ਕਰ ਲਓ। ਬਿੱਘਾ ਸੂਬੇ ਅਨੁਸਾਰ ਬਦਲਦਾ ਹੈ (ਲਗਭਗ ਮੁੱਲ)।',
+   made:'ਪੰਜਾਬ ਦੇ ਕਿਸਾਨਾਂ ਲਈ ❤' },
+ hi:{ tag:'ज़मीन नाप · कैलकुलेटर',
+   tab_convert:'बदलें', tab_calc:'क्षेत्रफल', tab_formula:'फ़ॉर्मूले',
+   seg_area:'क्षेत्रफल (Area)', seg_length:'लंबाई (Length)',
+   in_value:'मान लिखें', in_unit:'यूनिट',
+   res_title:'परिणाम — सभी यूनिट में',
+   in_km:'कनाल–मरला–सरवाही में',
+   len_note:'टिप: 1 करम × 1 करम = 1 सरवाही = 30.25 वर्ग फुट',
+   length:'लंबाई (Length)', width:'चौड़ाई (Width)', base:'आधार (Base)', height:'ऊँचाई (Height)',
+   total:'कुल क्षेत्रफल', formula:'फ़ॉर्मूला',
+   copy:'कॉपी करें', copied:'कॉपी हो गया ✓',
+   rect:'आयत (Rectangle)', tri:'त्रिभुज (Triangle)',
+   g_punjab:'पंजाबी यूनिट', g_std:'मानक यूनिट', g_region:'अन्य राज्य (लगभग)', g_len:'लंबाई यूनिट',
+   th_unit:'यूनिट', th_value:'मान',
+   enter_hint:'ऊपर मान लिखें…',
+   note:'नोट: मरला = 272.25 वर्ग फुट (मानक) माना गया है। कुछ इलाकों में कच्चा मरला अलग होता है — ख़रीद-बिक्री से पहले जाँच लें। बीघा राज्य अनुसार बदलता है (लगभग मान)।',
+   made:'पंजाब के किसानों के लिए ❤' },
+ en:{ tag:'Land Measurement Calculator',
+   tab_convert:'Convert', tab_calc:'Area Calc', tab_formula:'Formulas',
+   seg_area:'Area', seg_length:'Length',
+   in_value:'Enter value', in_unit:'Unit',
+   res_title:'Result — in all units',
+   in_km:'In Kanal–Marla–Sarwahi',
+   len_note:'Tip: 1 Karam × 1 Karam = 1 Sarwahi = 30.25 sq ft',
+   length:'Length', width:'Width', base:'Base', height:'Height',
+   total:'Total Area', formula:'Formula',
+   copy:'Copy', copied:'Copied ✓',
+   rect:'Rectangle', tri:'Triangle',
+   g_punjab:'Punjab Units', g_std:'Standard Units', g_region:'Other States (approx)', g_len:'Length Units',
+   th_unit:'Unit', th_value:'Value',
+   enter_hint:'Enter a value above…',
+   note:'Note: Marla = 272.25 sq ft (standard). Some areas use a smaller “kaccha marla” — verify locally. Bigha varies by state (approximate values).',
+   made:'Made for Punjab ❤' }
+};
+function t(k){ return (I18N[state.lang] && I18N[state.lang][k]) || I18N.en[k] || k; }
+
+/* ================= UNITS ================= */
+var AREA_UNITS = [
+ {id:'kanal',   g:'punjab', sqft:5445,        n:{pa:'ਕਨਾਲ',hi:'कनाल',en:'Kanal'}},
+ {id:'marla',   g:'punjab', sqft:272.25,      n:{pa:'ਮਰਲਾ',hi:'मरला',en:'Marla'}},
+ {id:'sarwahi', g:'punjab', sqft:30.25,       n:{pa:'ਸਰਵਾਹੀ (ਵਰਗ ਕਰਮ)',hi:'सरवाही (वर्ग करम)',en:'Sarwahi (Sq. Karam)'}},
+ {id:'biswa_pb',g:'punjab', sqft:1089,        n:{pa:'ਬਿਸਵਾ (ਪੰਜਾਬ)',hi:'बिस्वा (पंजाब)',en:'Biswa (Punjab)'}},
+ {id:'acre',    g:'punjab', sqft:43560,       n:{pa:'ਕਿੱਲਾ / ਏਕੜ',hi:'किल्ला / एकड़',en:'Killa / Acre'}},
+ {id:'murabba', g:'punjab', sqft:1089000,     n:{pa:'ਮੁਰੱਬਾ (25 ਕਿੱਲੇ)',hi:'मुरब्बा (25 किल्ले)',en:'Murabba (25 Killa)'}},
+ {id:'hectare', g:'std',    sqft:107639.10417,n:{pa:'ਹੈਕਟੇਅਰ',hi:'हेक्टेयर',en:'Hectare'}},
+ {id:'sqyd',    g:'std',    sqft:9,           n:{pa:'ਵਰਗ ਗਜ਼',hi:'वर्ग गज',en:'Sq. Yard (Gaj)'}},
+ {id:'sqm',     g:'std',    sqft:10.7639104,  n:{pa:'ਵਰਗ ਮੀਟਰ',hi:'वर्ग मीटर',en:'Sq. Meter'}},
+ {id:'sqft',    g:'std',    sqft:1,           n:{pa:'ਵਰਗ ਫੁੱਟ',hi:'वर्ग फुट',en:'Sq. Feet'}},
+ {id:'bigha_pb',g:'region', sqft:21780,       n:{pa:'ਬਿੱਘਾ (ਪੰਜਾਬ/ਹਰਿਆਣਾ)',hi:'बीघा (पंजाब/हरियाणा)',en:'Bigha (Punjab/Haryana)'}},
+ {id:'bigha_up',g:'region', sqft:27000,       n:{pa:'ਬਿੱਘਾ (ਯੂ.ਪੀ.)',hi:'बीघा (उ.प्र.)',en:'Bigha (UP)'}},
+ {id:'bigha_br',g:'region', sqft:27225,       n:{pa:'ਬਿੱਘਾ (ਬਿਹਾਰ)',hi:'बीघा (बिहार)',en:'Bigha (Bihar)'}},
+ {id:'bigha_raj',g:'region',sqft:27225,       n:{pa:'ਬਿੱਘਾ (ਰਾਜਸਥਾਨ ਪੱਕਾ)',hi:'बीघा (राजस्थान पक्का)',en:'Bigha (Rajasthan Pukka)'}},
+ {id:'bigha_wb',g:'region', sqft:14400,       n:{pa:'ਬਿੱਘਾ (ਬੰਗਾਲ/ਅਸਾਮ)',hi:'बीघा (बंगाल/असम)',en:'Bigha (Bengal/Assam)'}},
+ {id:'bigha_hp',g:'region', sqft:8712,        n:{pa:'ਬਿੱਘਾ (ਹਿਮਾਚਲ)',hi:'बीघा (हिमाचल)',en:'Bigha (Himachal)'}},
+ {id:'bigha_gj',g:'region', sqft:17424,       n:{pa:'ਬਿੱਘਾ (ਗੁਜਰਾਤ)',hi:'बीघा (गुजरात)',en:'Bigha (Gujarat)'}},
+ {id:'biswa_up',g:'region', sqft:1361.25,     n:{pa:'ਬਿਸਵਾ (ਯੂ.ਪੀ.)',hi:'बिस्वा (उ.प्र.)',en:'Biswa (UP)'}},
+ {id:'katha_wb',g:'region', sqft:720,         n:{pa:'ਕੱਠਾ (ਬੰਗਾਲ)',hi:'कट्ठा (बंगाल)',en:'Katha (Bengal)'}},
+ {id:'guntha',  g:'region', sqft:1089,        n:{pa:'ਗੁੰਠਾ',hi:'गुंठा',en:'Guntha'}},
+ {id:'cent',    g:'region', sqft:435.6,       n:{pa:'ਸੈਂਟ',hi:'सेंट',en:'Cent'}}
+];
+var LEN_UNITS = [
+ {id:'ft',   ft:1,             n:{pa:'ਫੁੱਟ',hi:'फुट',en:'Feet'}},
+ {id:'karam',ft:5.5,           n:{pa:'ਕਰਮ',hi:'करम',en:'Karam'}},
+ {id:'gaj',  ft:3,             n:{pa:'ਗਜ਼ (ਲੰਬਾਈ ਵਿੱਚ)',hi:'गज (यार्ड)',en:'Gaj (Yard)'}},
+ {id:'m',    ft:3.280839895,   n:{pa:'ਮੀਟਰ',hi:'मीटर',en:'Meter'}},
+ {id:'inch', ft:1/12,          n:{pa:'ਇੰਚ',hi:'इंच',en:'Inch'}}
+];
+var KM = { kanal:{pa:'ਕਨਾਲ',hi:'कनाल',en:'Kanal'}, marla:{pa:'ਮਰਲਾ',hi:'मरला',en:'Marla'}, sarwahi:{pa:'ਸਰਵਾਹੀ',hi:'सरवाही',en:'Sarwahi'} };
+
+function unitById(list,id){ for(var i=0;i<list.length;i++){ if(list[i].id===id) return list[i]; } return list[0]; }
+function unitLabel(u){
+  if(state.lang==='en') return u.n.en;
+  return u.n[state.lang] + ' <span class="en">(' + u.n.en + ')</span>';
+}
+function unitPlainText(u){ return u.n.en; }
+
+/* ================= HELPERS ================= */
+function fmt(n){
+  if(!isFinite(n)) return '—';
+  if(n===0) return '0';
+  var a=Math.abs(n);
+  var d = a>=1000?2:(a>=100?3:4);
+  try{ return n.toLocaleString('en-IN',{maximumFractionDigits:d}); }
+  catch(e){ return String(Math.round(n*10000)/10000); }
+}
+function kmBreakdown(sqft){
+  var rem=sqft;
+  var kanal=Math.floor(rem/5445); rem-=kanal*5445;
+  var marla=Math.floor(rem/272.25); rem-=marla*272.25;
+  var sar=Math.round((rem/30.25)*100)/100;
+  if(sar>=9){ sar-=9; marla++; }
+  if(marla>=20){ marla-=20; kanal++; }
+  return {kanal:kanal,marla:marla,sar:sar};
+}
+function kmString(sqft){
+  var b=kmBreakdown(sqft), parts=[];
+  if(b.kanal) parts.push(b.kanal+' '+KM.kanal[state.lang]);
+  if(b.marla) parts.push(b.marla+' '+KM.marla[state.lang]);
+  if(b.sar)   parts.push(b.sar+' '+KM.sarwahi[state.lang]);
+  return parts.length?parts.join(' '):'0';
+}
+function esc(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+
+/* ================= RENDER: TABLES ================= */
+function areaTableHTML(sqft){
+  var h='<table class="res"><thead><tr><th>'+esc(t('th_unit'))+'</th><th style="text-align:right">'+esc(t('th_value'))+'</th></tr></thead><tbody>';
+  var lastG=null;
+  AREA_UNITS.forEach(function(u){
+    if(u.g!==lastG){ h+='<tr class="grp"><td colspan="2">'+esc(t('g_'+u.g))+'</td></tr>'; lastG=u.g; }
+    var v=fmt(sqft/u.sqft);
+    h+='<tr data-copy="'+esc(v+' '+unitPlainText(u))+'"><td class="uname">'+unitLabel(u)+'</td><td class="val">'+v+'</td></tr>';
+  });
+  return h+'</tbody></table>';
+}
+function lenTableHTML(ftTotal){
+  var h='<table class="res"><thead><tr><th>'+esc(t('th_unit'))+'</th><th style="text-align:right">'+esc(t('th_value'))+'</th></tr></thead><tbody>';
+  h+='<tr class="grp"><td colspan="2">'+esc(t('g_len'))+'</td></tr>';
+  LEN_UNITS.forEach(function(u){
+    var v=fmt(ftTotal/u.ft);
+    h+='<tr data-copy="'+esc(v+' '+unitPlainText(u))+'"><td class="uname">'+unitLabel(u)+'</td><td class="val">'+v+'</td></tr>';
+  });
+  return h+'</tbody></table>';
+}
+function heroAreaHTML(sqft){
+  return '<div class="hero"><div class="cap">'+esc(t('in_km'))+'</div>'+
+         '<div class="line1">'+esc(kmString(sqft))+'</div>'+
+         '<div class="line2">= '+fmt(sqft)+' sq ft &nbsp;·&nbsp; '+fmt(sqft/10.7639104)+' sq m</div></div>';
+}
+function wrapCard(inner){
+  return '<div class="card"><div class="res-head"><span class="rt">'+esc(t('res_title'))+'</span>'+
+         '<button class="copy-btn" id="copySummary">⧉ '+esc(t('copy'))+'</button></div>'+inner+'</div>';
+}
+
+/* ================= COMPUTE ================= */
+function computeConvert(){
+  var el=document.getElementById('convResults');
+  var v=parseFloat(document.getElementById('convInput').value);
+  if(isNaN(v)){ el.innerHTML='<div class="card"><div class="hint">'+esc(t('enter_hint'))+'</div></div>'; return; }
+  if(state.mode==='area'){
+    var u=unitById(AREA_UNITS,state.convUnit);
+    var sqft=v*u.sqft;
+    el.innerHTML=heroAreaHTML(sqft)+wrapCard(areaTableHTML(sqft));
+    el.setAttribute('data-sum', areaSummary(sqft, v, u));
+  }else{
+    var lu=unitById(LEN_UNITS,state.convUnit);
+    var ftT=v*lu.ft;
+    var hero='<div class="hero"><div class="cap">'+esc(t('seg_length'))+'</div>'+
+      '<div class="line1">'+fmt(ftT)+' ft</div><div class="line2">'+esc(t('len_note'))+'</div></div>';
+    el.innerHTML=hero+wrapCard(lenTableHTML(ftT));
+    var lines=[fmt(v)+' '+unitPlainText(lu)+' ='];
+    LEN_UNITS.forEach(function(x){ lines.push(fmt(ftT/x.ft)+' '+unitPlainText(x)); });
+    el.setAttribute('data-sum', lines.join('\n'));
+  }
+}
+function areaSummary(sqft, v, u){
+  var lines=[ fmt(v)+' '+unitPlainText(u)+' =', fmt(sqft)+' sq ft', kmString(sqft) ];
+  AREA_UNITS.forEach(function(x){ lines.push(fmt(sqft/x.sqft)+' '+unitPlainText(x)); });
+  return lines.join('\n');
+}
+function computeCalc(){
+  var el=document.getElementById('calcResults');
+  var vL=parseFloat(document.getElementById('inpL').value);
+  var vW=parseFloat(document.getElementById('inpW').value);
+  if(isNaN(vL)||isNaN(vW)){ el.innerHTML='<div class="card"><div class="hint">'+esc(t('enter_hint'))+'</div></div>'; return; }
+  var uL=unitById(LEN_UNITS,state.unitL), uW=unitById(LEN_UNITS,state.unitW);
+  var ftL=vL*uL.ft, ftW=vW*uW.ft;
+  var sqft = state.shape==='tri' ? 0.5*ftL*ftW : ftL*ftW;
+  var sign = state.shape==='tri' ? '½ × ' : '';
+  var fl = '<div class="fline"><b>'+esc(t('formula'))+':</b> '+sign+fmt(vL)+' '+esc(unitPlainText(uL))+' × '+fmt(vW)+' '+esc(unitPlainText(uW))+
+           ' = '+sign+fmt(ftL)+' ft × '+fmt(ftW)+' ft = <b>'+fmt(sqft)+' sq ft</b></div>';
+  el.innerHTML=fl+heroAreaHTML(sqft)+wrapCard(areaTableHTML(sqft));
+  el.setAttribute('data-sum', areaSummary(sqft, sqft, unitById(AREA_UNITS,'sqft')));
+}
+
+/* ================= FORMULAS TAB ================= */
+var FOM = [
+ {title:{pa:'ਮੁੱਢਲੇ ਫਾਰਮੂਲੇ',hi:'मूल फ़ॉर्मूले',en:'Basic Formulas'}, items:[
+   {x:{pa:'ਆਇਤ: ਖੇਤਰਫਲ = ਲੰਬਾਈ × ਚੌੜਾਈ',hi:'आयत: क्षेत्रफल = लंबाई × चौड़ाई',en:'Rectangle: Area = Length × Width'}},
+   {x:{pa:'ਤਿਕੋਣ: ਖੇਤਰਫਲ = ½ × ਅਧਾਰ × ਉਚਾਈ',hi:'त्रिभुज: क्षेत्रफल = ½ × आधार × ऊँचाई',en:'Triangle: Area = ½ × Base × Height'}},
+   {x:{pa:'ਵਰਗ: ਖੇਤਰਫਲ = ਸਾਈਡ × ਸਾਈਡ',hi:'वर्ग: क्षेत्रफल = भुजा × भुजा',en:'Square: Area = Side × Side'}} ]},
+ {title:{pa:'ਪੰਜਾਬ ਨਾਪ-ਪ੍ਰਣਾਲੀ',hi:'पंजाब नाप प्रणाली',en:'Punjab Land System'}, items:[
+   {x:{pa:'1 ਕਰਮ = 5.5 ਫੁੱਟ = 66 ਇੰਚ',hi:'1 करम = 5.5 फुट = 66 इंच',en:'1 Karam = 5.5 ft = 66 in'}},
+   {x:{pa:'1 ਸਰਵਾਹੀ = 1 ਕਰਮ × 1 ਕਰਮ = 30.25 ਵਰਗ ਫੁੱਟ',hi:'1 सरवाही = 1 करम × 1 करम = 30.25 वर्ग फुट',en:'1 Sarwahi = 1 Karam × 1 Karam = 30.25 sq ft'}},
+   {x:{pa:'1 ਮਰਲਾ = 9 ਸਰਵਾਹੀ = 272.25 ਵਰਗ ਫੁੱਟ',hi:'1 मरला = 9 सरवाही = 272.25 वर्ग फुट',en:'1 Marla = 9 Sarwahi = 272.25 sq ft'}},
+   {x:{pa:'1 ਕਨਾਲ = 20 ਮਰਲਾ = 5,445 ਵਰਗ ਫੁੱਟ',hi:'1 कनाल = 20 मरला = 5,445 वर्ग फुट',en:'1 Kanal = 20 Marla = 5,445 sq ft'}},
+   {x:{pa:'1 ਕਿੱਲਾ (ਏਕੜ) = 8 ਕਨਾਲ = 160 ਮਰਲਾ = 43,560 ਵਰਗ ਫੁੱਟ',hi:'1 किल्ला (एकड़) = 8 कनाल = 160 मरला = 43,560 वर्ग फुट',en:'1 Killa (Acre) = 8 Kanal = 160 Marla = 43,560 sq ft'}},
+   {x:{pa:'1 ਕਿੱਲਾ = 40 ਕਰਮ × 36 ਕਰਮ = 220 ਫੁੱਟ × 198 ਫੁੱਟ',hi:'1 किल्ला = 40 करम × 36 करम = 220 फुट × 198 फुट',en:'1 Killa = 40 Karam × 36 Karam = 220 ft × 198 ft'}},
+   {x:{pa:'1 ਬਿਸਵਾ = 4 ਮਰਲਾ = 1,089 ਵਰਗ ਫੁੱਟ (1 ਕਿੱਲਾ = 40 ਬਿਸਵੇ)',hi:'1 बिस्वा = 4 मरला = 1,089 वर्ग फुट (1 किल्ला = 40 बिस्वा)',en:'1 Biswa = 4 Marla = 1,089 sq ft (1 Killa = 40 Biswa)'}},
+   {x:{pa:'1 ਮੁਰੱਬਾ = 25 ਕਿੱਲੇ = 10,89,000 ਵਰਗ ਫੁੱਟ',hi:'1 मुरब्बा = 25 किल्ले = 10,89,000 वर्ग फुट',en:'1 Murabba = 25 Killa = 10,89,000 sq ft'}},
+   {x:{pa:'1 ਬਿੱਘਾ (ਪੰਜਾਬ) = 4 ਕਨਾਲ = 21,780 ਵਰਗ ਫੁੱਟ (2 ਬਿੱਘੇ = 1 ਕਿੱਲਾ)',hi:'1 बीघा (पंजाब) = 4 कनाल = 21,780 वर्ग फुट (2 बीघे = 1 किल्ला)',en:'1 Bigha (Punjab) = 4 Kanal = 21,780 sq ft (2 Bigha = 1 Killa)'}},
+   {x:{pa:'1 ਹੈਕਟੇਅਰ = 2.471 ਕਿੱਲੇ · 1 ਵਰਗ ਗਜ਼ = 9 ਵਰਗ ਫੁੱਟ',hi:'1 हेक्टेयर = 2.471 किल्ले · 1 वर्ग गज = 9 वर्ग फुट',en:'1 Hectare = 2.471 Killa · 1 Sq Yard (Gaj) = 9 sq ft'}} ]},
+ {title:{pa:'ਵਰਗ ਫੁੱਟ ਤੋਂ ਬਦਲੋ',hi:'वर्ग फुट से बदलें',en:'Convert From Square Feet'}, items:[
+   {x:{pa:'ਸਰਵਾਹੀ = ਵਰਗ ਫੁੱਟ ÷ 30.25',hi:'सरवाही = वर्ग फुट ÷ 30.25',en:'Sarwahi = sq ft ÷ 30.25'}},
+   {x:{pa:'ਮਰਲਾ = ਵਰਗ ਫੁੱਟ ÷ 272.25',hi:'मरला = वर्ग फुट ÷ 272.25',en:'Marla = sq ft ÷ 272.25'}},
+   {x:{pa:'ਕਨਾਲ = ਵਰਗ ਫੁੱਟ ÷ 5,445',hi:'कनाल = वर्ग फुट ÷ 5,445',en:'Kanal = sq ft ÷ 5,445'}},
+   {x:{pa:'ਕਿੱਲਾ (ਏਕੜ) = ਵਰਗ ਫੁੱਟ ÷ 43,560',hi:'किल्ला (एकड़) = वर्ग फुट ÷ 43,560',en:'Killa (Acre) = sq ft ÷ 43,560'}},
+   {x:{pa:'ਬਿੱਘਾ (ਪੰਜਾਬ) = ਵਰਗ ਫੁੱਟ ÷ 21,780',hi:'बीघा (पंजाब) = वर्ग फुट ÷ 21,780',en:'Bigha (Punjab) = sq ft ÷ 21,780'}},
+   {x:{pa:'ਹੈਕਟੇਅਰ = ਵਰਗ ਫੁੱਟ ÷ 1,07,639',hi:'हेक्टेयर = वर्ग फुट ÷ 1,07,639',en:'Hectare = sq ft ÷ 1,07,639'}},
+   {x:{pa:'ਵਰਗ ਮੀਟਰ = ਵਰਗ ਫੁੱਟ ÷ 10.764',hi:'वर्ग मीटर = वर्ग फुट ÷ 10.764',en:'Sq Meter = sq ft ÷ 10.764'}} ]},
+ {title:{pa:'ਬਿੱਘਾ — ਸੂਬੇ ਅਨੁਸਾਰ (ਲਗਭਗ)',hi:'बीघा — राज्य अनुसार (लगभग)',en:'Bigha — State-wise (approx)'}, bighaTable:true},
+ {title:{pa:'ਉਦਾਹਰਨਾਂ',hi:'उदाहरण',en:'Examples'}, items:[
+   {x:{pa:'20 ਕਰਮ × 9 ਕਰਮ (110 ਫੁੱਟ × 49.5 ਫੁੱਟ) = 180 ਸਰਵਾਹੀ = 20 ਮਰਲਾ = 1 ਕਨਾਲ',hi:'20 करम × 9 करम (110 फुट × 49.5 फुट) = 180 सरवाही = 20 मरला = 1 कनाल',en:'20 Karam × 9 Karam (110 ft × 49.5 ft) = 180 Sarwahi = 20 Marla = 1 Kanal'}},
+   {x:{pa:'100 ਫੁੱਟ × 50 ਫੁੱਟ = 5,000 ਵਰਗ ਫੁੱਟ ÷ 272.25 ≈ 18.36 ਮਰਲਾ',hi:'100 फुट × 50 फुट = 5,000 वर्ग फुट ÷ 272.25 ≈ 18.36 मरला',en:'100 ft × 50 ft = 5,000 sq ft ÷ 272.25 ≈ 18.36 Marla'}},
+   {x:{pa:'220 ਫੁੱਟ × 198 ਫੁੱਟ = 43,560 ਵਰਗ ਫੁੱਟ = 1 ਕਿੱਲਾ = 8 ਕਨਾਲ',hi:'220 फुट × 198 फुट = 43,560 वर्ग फुट = 1 किल्ला = 8 कनाल',en:'220 ft × 198 ft = 43,560 sq ft = 1 Killa = 8 Kanal'}} ]}
+];
+var BIGHA_ROWS = [
+ {r:{pa:'ਪੰਜਾਬ / ਹਰਿਆਣਾ (4 ਕਨਾਲ)',hi:'पंजाब / हरियाणा (4 कनाल)',en:'Punjab / Haryana (4 Kanal)'}, v:'21,780'},
+ {r:{pa:'ਉੱਤਰ ਪ੍ਰਦੇਸ਼ (20 ਬਿਸਵੇ)',hi:'उत्तर प्रदेश (20 बिस्वा)',en:'Uttar Pradesh (20 Biswa)'}, v:'≈ 27,000'},
+ {r:{pa:'ਬਿਹਾਰ (20 ਕੱਠੇ)',hi:'बिहार (20 कट्ठे)',en:'Bihar (20 Katha)'}, v:'≈ 27,225'},
+ {r:{pa:'ਰਾਜਸਥਾਨ — ਪੱਕਾ / ਕੱਚਾ',hi:'राजस्थान — पक्का / कच्चा',en:'Rajasthan — Pukka / Kachha'}, v:'27,225 / 17,424'},
+ {r:{pa:'ਬੰਗਾਲ / ਅਸਾਮ (20 ਕਠੇ)',hi:'बंगाल / असम (20 कट्ठा)',en:'Bengal / Assam (20 Katha)'}, v:'14,400'},
+ {r:{pa:'ਹਿਮਾਚਲ (5 ਬਿੱਘੇ = 1 ਏਕੜ)',hi:'हिमाचल (5 बीघे = 1 एकड़)',en:'Himachal (5 Bigha = 1 Acre)'}, v:'8,712'},
+ {r:{pa:'ਗੁਜਰਾਤ',hi:'गुजरात',en:'Gujarat'}, v:'17,424'},
+ {r:{pa:'ਉੱਤਰਾਖੰਡ',hi:'उत्तराखंड',en:'Uttarakhand'}, v:'6,804'}
+];
+function buildFormula(){
+  var h='';
+  FOM.forEach(function(c){
+    h+='<div class="card fcard"><h3>'+esc(c.title[state.lang]||c.title.en)+'</h3>';
+    if(c.bighaTable){
+      h+='<table class="res bt"><thead><tr><th>'+esc(t('th_unit'))+'</th><th style="text-align:right">≈ sq ft</th></tr></thead><tbody>';
+      BIGHA_ROWS.forEach(function(r){ h+='<tr><td class="uname">'+esc(r.r[state.lang]||r.r.en)+'</td><td class="v">'+r.v+'</td></tr>'; });
+      h+='</tbody></table>';
+    }else{
+      c.items.forEach(function(it){ h+='<div class="frow"><div class="fx">'+esc(it.x[state.lang]||it.x.en)+'</div></div>'; });
+    }
+    h+='</div>';
+  });
+  h+='<div class="card fcard"><h3>⚠️ '+esc(state.lang==='pa'?'ਧਿਆਨ ਰੱਖੋ':(state.lang==='hi'?'ध्यान रखें':'Important'))+'</h3><div class="frow"><div class="fx" style="font-weight:500">'+esc(t('note'))+'</div></div></div>';
+  document.getElementById('formulaContent').innerHTML=h;
+}
+
+/* ================= SELECTS / LANGUAGE ================= */
+function rebuildSelect(sel,list,groupId){
+  var prev=sel.getAttribute('data-val')||groupId;
+  var h='', lastG=null;
+  list.forEach(function(u){
+    var g=u.g||'len';
+    if(g!==lastG){ if(lastG!==null) h+='</optgroup>'; h+='<optgroup label="'+esc(t('g_'+g))+'">'; lastG=g; }
+    var label = state.lang==='en' ? u.n.en : (u.n[state.lang]+' ('+u.n.en+')');
+    h+='<option value="'+u.id+'"'+(u.id===prev?' selected':'')+'>'+esc(label)+'</option>';
+  });
+  if(lastG!==null) h+='</optgroup>';
+  sel.innerHTML=h;
+  sel.setAttribute('data-val', prev);
+  if(sel.selectedIndex<0){ sel.selectedIndex=0; sel.setAttribute('data-val', sel.value); }
+}
+function applyLang(){
+  document.documentElement.lang=state.lang;
+  document.querySelectorAll('[data-t]').forEach(function(el){ el.textContent=t(el.dataset.t); });
+  document.querySelectorAll('.lang-btn').forEach(function(b){ b.classList.toggle('active', b.dataset.lang===state.lang); });
+  rebuildSelect(document.getElementById('convUnit'), state.mode==='area'?AREA_UNITS:LEN_UNITS, state.convUnit);
+  state.convUnit=document.getElementById('convUnit').value;
+  rebuildSelect(document.getElementById('unitL'), LEN_UNITS, state.unitL);
+  state.unitL=document.getElementById('unitL').value;
+  rebuildSelect(document.getElementById('unitW'), LEN_UNITS, state.unitW);
+  state.unitW=document.getElementById('unitW').value;
+  buildFormula();
+  computeConvert(); computeCalc();
+}
+
+/* ================= COPY / TOAST ================= */
+var toastTimer=null;
+function toast(msg){
+  var el=document.getElementById('toast');
+  el.textContent=msg; el.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer=setTimeout(function(){ el.classList.remove('show'); },1600);
+}
+function copyText(txt){
+  function fallback(){
+    var ta=document.createElement('textarea');
+    ta.value=txt; ta.style.position='fixed'; ta.style.opacity='0';
+    document.body.appendChild(ta); ta.select();
+    try{ document.execCommand('copy'); toast(t('copied')); }catch(e){}
+    document.body.removeChild(ta);
+  }
+  if(navigator.clipboard&&navigator.clipboard.writeText){
+    navigator.clipboard.writeText(txt).then(function(){ toast(t('copied')); },fallback);
+  }else fallback();
+}
+
+/* ================= EVENTS ================= */
+document.querySelectorAll('.lang-btn').forEach(function(b){
+  b.addEventListener('click',function(){
+    state.lang=b.dataset.lang;
+    try{ localStorage.setItem('zn_lang',state.lang); }catch(e){}
+    applyLang();
+  });
+});
+document.querySelectorAll('.tab-btn').forEach(function(b){
+  b.addEventListener('click',function(){
+    state.tab=b.dataset.tab;
+    document.querySelectorAll('.tab-btn').forEach(function(x){ x.classList.toggle('active',x===b); });
+    document.getElementById('sec-convert').hidden = state.tab!=='convert';
+    document.getElementById('sec-calc').hidden     = state.tab!=='calc';
+    document.getElementById('sec-formula').hidden  = state.tab!=='formula';
+    window.scrollTo({top:0});
+  });
+});
+document.querySelectorAll('#modeSeg button').forEach(function(b){
+  b.addEventListener('click',function(){
+    state.mode=b.dataset.mode;
+    document.querySelectorAll('#modeSeg button').forEach(function(x){ x.classList.toggle('active',x===b); });
+    var wasArea=state.convUnit && unitById(AREA_UNITS,state.convUnit).id===state.convUnit;
+    if(state.mode==='area'){ state.convUnit='kanal'; } else { state.convUnit='ft'; }
+    rebuildSelect(document.getElementById('convUnit'), state.mode==='area'?AREA_UNITS:LEN_UNITS, state.convUnit);
+    computeConvert();
+  });
+});
+document.querySelectorAll('#shapeSeg button').forEach(function(b){
+  b.addEventListener('click',function(){
+    state.shape=b.dataset.shape;
+    document.querySelectorAll('#shapeSeg button').forEach(function(x){ x.classList.toggle('active',x===b); });
+    document.getElementById('lblL').textContent = state.shape==='tri'?t('base'):t('length');
+    document.getElementById('lblW').textContent = state.shape==='tri'?t('height'):t('width');
+    computeCalc();
+  });
+});
+document.getElementById('convInput').addEventListener('input',computeConvert);
+document.getElementById('convUnit').addEventListener('change',function(){
+  state.convUnit=this.value; this.setAttribute('data-val',this.value); computeConvert();
+});
+['inpL','inpW'].forEach(function(id){
+  document.getElementById(id).addEventListener('input',computeCalc);
+});
+['unitL','unitW'].forEach(function(id){
+  document.getElementById(id).addEventListener('change',function(){
+    if(id==='unitL') state.unitL=this.value; else state.unitW=this.value;
+    this.setAttribute('data-val',this.value); computeCalc();
+  });
+});
+document.addEventListener('click',function(ev){
+  var tr=ev.target.closest?ev.target.closest('tr[data-copy]'):null;
+  if(tr){ copyText(tr.getAttribute('data-copy')); return; }
+  if(ev.target.id==='copySummary'||(ev.target.closest&&ev.target.closest('#copySummary'))){
+    var host=ev.target.closest('[data-sum]');
+    if(host) copyText(host.getAttribute('data-sum'));
+  }
+});
+
+/* ================= INIT ================= */
+applyLang();
+</script>
+</body>
+</html>
